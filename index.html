@@ -1,766 +1,333 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetID - Identificação para seu Pet</title>
-    <style>
-        :root {
-            --primary: #4a6fa5;
-            --secondary: #6b8cbc;
-            --accent: #ff9a76;
-            --light: #f5f5f5;
-            --dark: #333;
-            --success: #4caf50;
-            --danger: #f44336;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-        
-        .logo-icon {
-            font-size: 2.5rem;
-            margin-right: 1rem;
-        }
-        
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .user-info {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        h2 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--light);
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-        
-        input:focus, select:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
-        }
-        
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        
-        button:hover {
-            background-color: var(--secondary);
-        }
-        
-        .btn-secondary {
-            background-color: var(--accent);
-        }
-        
-        .btn-secondary:hover {
-            background-color: #ff8a5c;
-        }
-        
-        .btn-danger {
-            background-color: var(--danger);
-        }
-        
-        .btn-danger:hover {
-            background-color: #d32f2f;
-        }
-        
-        .link-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-        }
-        
-        .link-display {
-            background-color: white;
-            padding: 1rem;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            margin: 1rem 0;
-            width: 100%;
-            max-width: 600px;
-            word-break: break-all;
-            text-align: center;
-        }
-        
-        .link-display a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .link-display a:hover {
-            text-decoration: underline;
-        }
-        
-        .actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .pet-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .pet-card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            transition: transform 0.3s;
-        }
-        
-        .pet-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .pet-name {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .pet-info {
-            margin-bottom: 1rem;
-        }
-        
-        .pet-actions {
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .auth-forms {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .auth-form {
-            flex: 1;
-            min-width: 300px;
-        }
-        
-        footer {
-            background-color: var(--dark);
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 5px;
-            color: white;
-            font-weight: 600;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .notification.success {
-            background-color: var(--success);
-            opacity: 1;
-        }
-        
-        .notification.error {
-            background-color: var(--danger);
-            opacity: 1;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .pet-list {
-                grid-template-columns: 1fr;
-            }
-            
-            .actions {
-                flex-direction: column;
-            }
-            
-            .auth-forms {
-                flex-direction: column;
-            }
-            
-            .user-info {
-                position: static;
-                justify-content: center;
-                margin-top: 1rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="logo">
-            <div class="logo-icon">🐾</div>
-            <div>
-                <h1>PetID</h1>
-                <p>Identificação segura para seu pet</p>
-            </div>
-        </div>
-        <div class="user-info hidden" id="userInfo">
-            <span id="userName">Usuário</span>
-            <button id="logoutBtn" class="btn-danger">Sair</button>
-        </div>
-    </header>
-    
-    <div class="container">
-        <!-- Área de autenticação -->
-        <div class="card" id="authArea">
-            <h2>Cadastre-se ou Faça Login</h2>
-            <div class="auth-forms">
-                <div class="auth-form">
-                    <h3>Cadastro</h3>
-                    <form id="registerForm">
-                        <div class="form-group">
-                            <label for="regName">Nome Completo</label>
-                            <input type="text" id="regName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="regEmail">E-mail</label>
-                            <input type="email" id="regEmail" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="regPassword">Senha</label>
-                            <input type="password" id="regPassword" required minlength="6">
-                        </div>
-                        <button type="submit">Criar Conta</button>
-                    </form>
-                </div>
-                
-                <div class="auth-form">
-                    <h3>Login</h3>
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <label for="loginEmail">E-mail</label>
-                            <input type="email" id="loginEmail" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="loginPassword">Senha</label>
-                            <input type="password" id="loginPassword" required>
-                        </div>
-                        <button type="submit">Entrar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Área principal do aplicativo (após login) -->
-        <div class="hidden" id="appArea">
-            <div class="card">
-                <h2>Cadastrar Novo Pet</h2>
-                <form id="petForm">
-                    <div class="form-group">
-                        <label for="petName">Nome do Pet</label>
-                        <input type="text" id="petName" required placeholder="Ex: Rex, Luna, etc.">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="petType">Tipo de Animal</label>
-                        <select id="petType" required>
-                            <option value="">Selecione...</option>
-                            <option value="Cachorro">Cachorro</option>
-                            <option value="Gato">Gato</option>
-                            <option value="Outro">Outro</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="petBreed">Raça</label>
-                        <input type="text" id="petBreed" required placeholder="Ex: Labrador, Siames, etc.">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="ownerName">Nome do Dono</label>
-                        <input type="text" id="ownerName" required placeholder="Seu nome completo">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="ownerPhone">Telefone do Dono</label>
-                        <input type="tel" id="ownerPhone" required placeholder="(11) 99999-9999">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="additionalInfo">Informações Adicionais (opcional)</label>
-                        <input type="text" id="additionalInfo" placeholder="Alergias, cuidados especiais, etc.">
-                    </div>
-                    
-                    <button type="submit">Cadastrar Pet e Gerar Link</button>
-                </form>
-            </div>
-            
-            <div class="card hidden" id="linkCard">
-                <h2>Link Gerado</h2>
-                <p>Este link contém as informações do seu pet. Você pode compartilhá-lo com quem encontrar seu animal.</p>
-                
-                <div class="link-container">
-                    <div class="link-display">
-                        <a href="#" id="petLink" target="_blank">Clique aqui para ver as informações do pet</a>
-                    </div>
-                    <p>Compartilhe este link para que as pessoas possam visualizar as informações do pet</p>
-                </div>
-                
-                <div class="actions">
-                    <button id="copyBtn" class="btn-secondary">Copiar Link</button>
-                    <button id="newPetBtn">Cadastrar Outro Pet</button>
-                </div>
-            </div>
-            
-            <div class="card">
-                <h2>Meus Pets Cadastrados</h2>
-                <div class="pet-list" id="petList">
-                    <p id="noPetsMessage">Nenhum pet cadastrado ainda. Cadastre seu primeiro pet acima!</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <footer>
-        <p>PetID &copy; 2023 - Mantenha seu pet seguro e identificado</p>
-    </footer>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Elementos da interface
-            const authArea = document.getElementById('authArea');
-            const appArea = document.getElementById('appArea');
-            const userInfo = document.getElementById('userInfo');
-            const userName = document.getElementById('userName');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const registerForm = document.getElementById('registerForm');
-            const loginForm = document.getElementById('loginForm');
-            const petForm = document.getElementById('petForm');
-            const linkCard = document.getElementById('linkCard');
-            const petLink = document.getElementById('petLink');
-            const copyBtn = document.getElementById('copyBtn');
-            const newPetBtn = document.getElementById('newPetBtn');
-            const petList = document.getElementById('petList');
-            const noPetsMessage = document.getElementById('noPetsMessage');
-            
-            // Estado da aplicação
-            let currentUser = null;
-            let pets = [];
-            let currentPetLink = null;
-            
-            // Verificar se há usuário logado
-            checkAuthStatus();
-            
-            // Eventos de formulário
-            registerForm.addEventListener('submit', handleRegister);
-            loginForm.addEventListener('submit', handleLogin);
-            logoutBtn.addEventListener('click', handleLogout);
-            petForm.addEventListener('submit', handlePetSubmit);
-            copyBtn.addEventListener('click', handleCopy);
-            newPetBtn.addEventListener('click', handleNewPet);
-            
-            // Funções de autenticação
-            function checkAuthStatus() {
-                const userData = localStorage.getItem('currentUser');
-                if (userData) {
-                    currentUser = JSON.parse(userData);
-                    showAppArea();
-                } else {
-                    showAuthArea();
-                }
-            }
-            
-            function handleRegister(e) {
-                e.preventDefault();
-                
-                const name = document.getElementById('regName').value;
-                const email = document.getElementById('regEmail').value;
-                const password = document.getElementById('regPassword').value;
-                
-                // Verificar se o usuário já existe
-                const users = JSON.parse(localStorage.getItem('users')) || [];
-                const existingUser = users.find(user => user.email === email);
-                
-                if (existingUser) {
-                    showNotification('Este e-mail já está cadastrado!', 'error');
-                    return;
-                }
-                
-                // Criar novo usuário
-                const newUser = {
-                    id: Date.now().toString(),
-                    name,
-                    email,
-                    password // Em uma aplicação real, isso seria criptografado
-                };
-                
-                users.push(newUser);
-                localStorage.setItem('users', JSON.stringify(users));
-                
-                showNotification('Conta criada com sucesso! Faça login para continuar.', 'success');
-                registerForm.reset();
-            }
-            
-            function handleLogin(e) {
-                e.preventDefault();
-                
-                const email = document.getElementById('loginEmail').value;
-                const password = document.getElementById('loginPassword').value;
-                
-                // Verificar credenciais
-                const users = JSON.parse(localStorage.getItem('users')) || [];
-                const user = users.find(u => u.email === email && u.password === password);
-                
-                if (!user) {
-                    showNotification('E-mail ou senha incorretos!', 'error');
-                    return;
-                }
-                
-                currentUser = user;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                showAppArea();
-                showNotification(`Bem-vindo(a), ${user.name}!`, 'success');
-            }
-            
-            function handleLogout() {
-                currentUser = null;
-                localStorage.removeItem('currentUser');
+<!-- ... todo o seu HTML até a tag <footer> ... -->
+<footer>
+    <p>PetID &copy; 2023 - Mantenha seu pet seguro e identificado</p>
+</footer>
+
+<!-- Adicione os scripts do Firebase ANTES do seu script principal -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function( ) {
+    // =================================================================
+    // PASSO 1: COLE A SUA CONFIGURAÇÃO DO FIREBASE AQUI
+    // =================================================================
+    const firebaseConfig = {
+        apiKey: "SUA_API_KEY",
+        authDomain: "SEU_AUTH_DOMAIN",
+        projectId: "SEU_PROJECT_ID",
+        storageBucket: "SEU_STORAGE_BUCKET",
+        messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+        appId: "SUA_APP_ID"
+    };
+
+    // Inicializar o Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore(); // Nosso banco de dados!
+
+    // Elementos da interface (mesmos de antes)
+    const authArea = document.getElementById('authArea');
+    const appArea = document.getElementById('appArea');
+    const userInfo = document.getElementById('userInfo');
+    const userName = document.getElementById('userName');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const registerForm = document.getElementById('registerForm');
+    const loginForm = document.getElementById('loginForm');
+    const petForm = document.getElementById('petForm');
+    const linkCard = document.getElementById('linkCard');
+    const petLink = document.getElementById('petLink');
+    const copyBtn = document.getElementById('copyBtn');
+    const newPetBtn = document.getElementById('newPetBtn');
+    const petList = document.getElementById('petList');
+    const noPetsMessage = document.getElementById('noPetsMessage');
+
+    // Estado da aplicação
+    let currentUser = null;
+    let currentPetLink = null;
+
+    // =================================================================
+    // LÓGICA PRINCIPAL
+    // =================================================================
+
+    // Verificar se há um pet na URL ao carregar a página
+    checkUrlForPet();
+
+    // Monitorar o estado de autenticação do Firebase
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            // Usuário está logado
+            currentUser = user;
+            showAppArea();
+        } else {
+            // Usuário não está logado
+            currentUser = null;
+            // Apenas exibe a área de login se não estivermos na página de um pet
+            const urlParams = new URLSearchParams(window.location.search);
+            if (!urlParams.has('pet')) {
                 showAuthArea();
-                showNotification('Logout realizado com sucesso!', 'success');
             }
+        }
+    });
+
+    // Eventos de formulário
+    registerForm.addEventListener('submit', handleRegister);
+    loginForm.addEventListener('submit', handleLogin);
+    logoutBtn.addEventListener('click', handleLogout);
+    petForm.addEventListener('submit', handlePetSubmit);
+    copyBtn.addEventListener('click', handleCopy);
+    newPetBtn.addEventListener('click', handleNewPet);
+
+    // Funções de autenticação (agora com Firebase)
+    function handleRegister(e) {
+        e.preventDefault();
+        const name = document.getElementById('regName').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+
+        auth.createUserWithEmailAndPassword(email, password)
+            .then(userCredential => {
+                return userCredential.user.updateProfile({
+                    displayName: name
+                }).then(() => {
+                    showNotification('Conta criada com sucesso! Faça login.', 'success');
+                    registerForm.reset();
+                });
+            })
+            .catch(error => {
+                showNotification(`Erro: ${error.message}`, 'error');
+            });
+    }
+
+    function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        auth.signInWithEmailAndPassword(email, password)
+            .then(userCredential => {
+                showNotification(`Bem-vindo(a), ${userCredential.user.displayName}!`, 'success');
+                // O onAuthStateChanged vai cuidar de mostrar a área do app
+            })
+            .catch(error => {
+                showNotification('E-mail ou senha incorretos!', 'error');
+            });
+    }
+
+    function handleLogout() {
+        auth.signOut().then(() => {
+            showNotification('Logout realizado com sucesso!', 'success');
+            // O onAuthStateChanged vai cuidar de mostrar a área de login
+        });
+    }
+
+    function showAuthArea() {
+        authArea.classList.remove('hidden');
+        appArea.classList.add('hidden');
+        userInfo.classList.add('hidden');
+    }
+
+    function showAppArea() {
+        authArea.classList.add('hidden');
+        appArea.classList.remove('hidden');
+        userInfo.classList.remove('hidden');
+        userName.textContent = currentUser.displayName;
+        loadUserPets();
+    }
+
+    // Funções de pets (agora com Firestore)
+    async function loadUserPets() {
+        if (!currentUser) return;
+
+        // Busca pets no Firestore onde o userId é igual ao do usuário logado
+        const snapshot = await db.collection('pets').where('userId', '==', currentUser.uid).get();
+        const userPets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        updatePetList(userPets);
+    }
+
+    async function handlePetSubmit(e) {
+        e.preventDefault();
+        
+        const petData = {
+            userId: currentUser.uid,
+            name: document.getElementById('petName').value,
+            type: document.getElementById('petType').value,
+            breed: document.getElementById('petBreed').value,
+            ownerName: document.getElementById('ownerName').value,
+            ownerPhone: document.getElementById('ownerPhone').value,
+            additionalInfo: document.getElementById('additionalInfo').value,
+            date: new Date().toLocaleDateString('pt-BR')
+        };
+
+        try {
+            // Adiciona o pet ao Firestore, que gera um ID automático
+            const docRef = await db.collection('pets').add(petData);
             
-            function showAuthArea() {
-                authArea.classList.remove('hidden');
-                appArea.classList.add('hidden');
-                userInfo.classList.add('hidden');
-            }
+            // Gera o link usando o ID do Firestore
+            generateLink(docRef.id);
             
-            function showAppArea() {
-                authArea.classList.add('hidden');
-                appArea.classList.remove('hidden');
-                userInfo.classList.remove('hidden');
-                userName.textContent = currentUser.name;
-                
-                // Carregar pets do usuário
-                loadUserPets();
-            }
+            linkCard.classList.remove('hidden');
+            linkCard.scrollIntoView({ behavior: 'smooth' });
+            showNotification('Pet cadastrado com sucesso!', 'success');
             
-            // Funções de pets
-            function loadUserPets() {
-                const allPets = JSON.parse(localStorage.getItem('pets')) || [];
-                pets = allPets.filter(pet => pet.userId === currentUser.id);
-                updatePetList();
-            }
+            // Recarrega a lista de pets
+            loadUserPets();
+        } catch (error) {
+            console.error("Erro ao cadastrar pet: ", error);
+            showNotification('Erro ao cadastrar pet.', 'error');
+        }
+    }
+
+    function generateLink(petId) {
+        const baseUrl = window.location.href.split('?')[0];
+        const petUrl = `${baseUrl}?pet=${petId}`;
+        
+        petLink.href = petUrl;
+        petLink.textContent = petUrl;
+        currentPetLink = petUrl;
+    }
+
+    function updatePetList(pets) {
+        petList.innerHTML = '';
+        if (pets.length === 0) {
+            noPetsMessage.classList.remove('hidden');
+            return;
+        }
+        
+        noPetsMessage.classList.add('hidden');
+        
+        pets.forEach(pet => {
+            const petCard = document.createElement('div');
+            petCard.className = 'pet-card';
             
-            function handlePetSubmit(e) {
-                e.preventDefault();
-                
-                // Coletar dados do formulário
-                const petData = {
-                    id: Date.now().toString(),
-                    userId: currentUser.id,
-                    name: document.getElementById('petName').value,
-                    type: document.getElementById('petType').value,
-                    breed: document.getElementById('petBreed').value,
-                    ownerName: document.getElementById('ownerName').value,
-                    ownerPhone: document.getElementById('ownerPhone').value,
-                    additionalInfo: document.getElementById('additionalInfo').value,
-                    date: new Date().toLocaleDateString('pt-BR')
-                };
-                
-                // Adicionar pet à lista
-                const allPets = JSON.parse(localStorage.getItem('pets')) || [];
-                allPets.push(petData);
-                localStorage.setItem('pets', JSON.stringify(allPets));
-                
-                // Atualizar lista local
-                pets.push(petData);
-                
-                // Gerar link
-                generateLink(petData);
-                
-                // Mostrar card do link
+            petCard.innerHTML = `
+                <div class="pet-name">${pet.name}</div>
+                <div class="pet-info">
+                    <p><strong>Tipo:</strong> ${pet.type}</p>
+                    <p><strong>Raça:</strong> ${pet.breed}</p>
+                    <p><strong>Dono:</strong> ${pet.ownerName}</p>
+                    <p><strong>Telefone:</strong> ${pet.ownerPhone}</p>
+                    ${pet.additionalInfo ? `<p><strong>Informações:</strong> ${pet.additionalInfo}</p>` : ''}
+                    <p><strong>Cadastrado em:</strong> ${pet.date}</p>
+                </div>
+                <div class="pet-actions">
+                    <button class="btn-view-link" data-id="${pet.id}">Ver Link</button>
+                    <button class="btn-delete btn-danger" data-id="${pet.id}">Excluir</button>
+                </div>
+            `;
+            petList.appendChild(petCard);
+        });
+        
+        // Adicionar eventos aos botões
+        document.querySelectorAll('.btn-view-link').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const petId = this.getAttribute('data-id');
+                generateLink(petId);
                 linkCard.classList.remove('hidden');
-                
-                // Atualizar lista de pets
-                updatePetList();
-                
-                // Rolar para o link
                 linkCard.scrollIntoView({ behavior: 'smooth' });
-                
-                showNotification('Pet cadastrado com sucesso!', 'success');
-            }
-            
-            function generateLink(petData) {
-                // Criar um link único para o pet
-                const baseUrl = window.location.href.split('?')[0];
-                const petUrl = `${baseUrl}?pet=${petData.id}`;
-                
-                // Atualizar o link na interface
-                petLink.href = petUrl;
-                petLink.textContent = petUrl;
-                currentPetLink = petUrl;
-            }
-            
-            function updatePetList() {
-                if (pets.length === 0) {
-                    noPetsMessage.classList.remove('hidden');
-                    return;
-                }
-                
-                noPetsMessage.classList.add('hidden');
-                petList.innerHTML = '';
-                
-                pets.forEach(pet => {
-                    const petCard = document.createElement('div');
-                    petCard.className = 'pet-card';
-                    
-                    petCard.innerHTML = `
-                        <div class="pet-name">${pet.name}</div>
-                        <div class="pet-info">
-                            <p><strong>Tipo:</strong> ${pet.type}</p>
-                            <p><strong>Raça:</strong> ${pet.breed}</p>
-                            <p><strong>Dono:</strong> ${pet.ownerName}</p>
-                            <p><strong>Telefone:</strong> ${pet.ownerPhone}</p>
-                            ${pet.additionalInfo ? `<p><strong>Informações:</strong> ${pet.additionalInfo}</p>` : ''}
-                            <p><strong>Cadastrado em:</strong> ${pet.date}</p>
-                        </div>
-                        <div class="pet-actions">
-                            <button class="btn-view-link" data-id="${pet.id}">Ver Link</button>
-                            <button class="btn-delete btn-danger" data-id="${pet.id}">Excluir</button>
-                        </div>
-                    `;
-                    
-                    petList.appendChild(petCard);
-                });
-                
-                // Adicionar eventos aos botões
-                document.querySelectorAll('.btn-view-link').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const petId = this.getAttribute('data-id');
-                        const pet = pets.find(p => p.id === petId);
-                        
-                        if (pet) {
-                            generateLink(pet);
-                            linkCard.classList.remove('hidden');
-                            linkCard.scrollIntoView({ behavior: 'smooth' });
-                        }
-                    });
-                });
-                
-                document.querySelectorAll('.btn-delete').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const petId = this.getAttribute('data-id');
-                        
-                        if (confirm('Tem certeza que deseja excluir este pet?')) {
-                            // Remover do armazenamento
-                            const allPets = JSON.parse(localStorage.getItem('pets')) || [];
-                            const updatedPets = allPets.filter(p => p.id !== petId);
-                            localStorage.setItem('pets', JSON.stringify(updatedPets));
-                            
-                            // Remover da lista local
-                            pets = pets.filter(p => p.id !== petId);
-                            updatePetList();
-                            
-                            showNotification('Pet excluído com sucesso!', 'success');
-                        }
-                    });
-                });
-            }
-            
-            function handleCopy() {
-                if (currentPetLink) {
-                    navigator.clipboard.writeText(currentPetLink)
-                        .then(() => {
-                            showNotification('Link copiado para a área de transferência!', 'success');
-                        })
-                        .catch(err => {
-                            console.error('Erro ao copiar link: ', err);
-                            showNotification('Erro ao copiar link', 'error');
-                        });
-                }
-            }
-            
-            function handleNewPet() {
-                // Limpar formulário
-                petForm.reset();
-                
-                // Esconder card do link
-                linkCard.classList.add('hidden');
-                
-                // Limpar link
-                petLink.href = '#';
-                petLink.textContent = 'Clique aqui para ver as informações do pet';
-                currentPetLink = null;
-                
-                // Rolar para o formulário
-                petForm.scrollIntoView({ behavior: 'smooth' });
-            }
-            
-            // Função auxiliar para mostrar notificações
-            function showNotification(message, type) {
-                const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                notification.textContent = message;
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.remove();
-                }, 3000);
-            }
-            
-            // Verificar se há um pet para exibir na URL
-            function checkUrlForPet() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const petId = urlParams.get('pet');
-                
-                if (petId) {
-                    // Buscar informações do pet
-                    const allPets = JSON.parse(localStorage.getItem('pets')) || [];
-                    const pet = allPets.find(p => p.id === petId);
-                    
-                    if (pet) {
-                        // Exibir informações do pet
-                        showPetInfo(pet);
-                    } else {
-                        document.body.innerHTML = `
-                            <div class="container">
-                                <div class="card">
-                                    <h2>Pet não encontrado</h2>
-                                    <p>O link que você acessou não corresponde a nenhum pet cadastrado.</p>
-                                    <a href="${window.location.origin + window.location.pathname}">Voltar para o PetID</a>
-                                </div>
-                            </div>
-                        `;
+            });
+        });
+        
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const petId = this.getAttribute('data-id');
+                if (confirm('Tem certeza que deseja excluir este pet?')) {
+                    try {
+                        await db.collection('pets').doc(petId).delete();
+                        showNotification('Pet excluído com sucesso!', 'success');
+                        loadUserPets(); // Recarrega a lista
+                    } catch (error) {
+                        showNotification('Erro ao excluir pet.', 'error');
                     }
                 }
-            }
-            
-            function showPetInfo(pet) {
-                document.body.innerHTML = `
-                    <header>
-                        <div class="logo">
-                            <div class="logo-icon">🐾</div>
-                            <div>
-                                <h1>PetID</h1>
-                                <p>Informações do Pet</p>
-                            </div>
-                        </div>
-                    </header>
-                    
-                    <div class="container">
-                        <div class="card">
-                            <h2>Informações do Pet</h2>
-                            <div class="pet-info">
-                                <p><strong>Nome:</strong> ${pet.name}</p>
-                                <p><strong>Tipo:</strong> ${pet.type}</p>
-                                <p><strong>Raça:</strong> ${pet.breed}</p>
-                                <p><strong>Dono:</strong> ${pet.ownerName}</p>
-                                <p><strong>Telefone do Dono:</strong> ${pet.ownerPhone}</p>
-                                ${pet.additionalInfo ? `<p><strong>Informações Adicionais:</strong> ${pet.additionalInfo}</p>` : ''}
-                            </div>
-                            <p style="margin-top: 1.5rem; padding: 1rem; background-color: #f0f8ff; border-radius: 5px;">
-                                <strong>Se você encontrou este pet, entre em contato com o dono pelo telefone informado acima.</strong>
-                            </p>
-                            <a href="${window.location.origin + window.location.pathname}" style="display: inline-block; margin-top: 1rem;">Voltar para o PetID</a>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            // Verificar se há um pet na URL ao carregar a página
-            checkUrlForPet();
+            });
         });
-    </script>
-</body>
-</html>
+    }
+
+    function handleCopy() {
+        if (currentPetLink) {
+            navigator.clipboard.writeText(currentPetLink)
+                .then(() => showNotification('Link copiado!', 'success'))
+                .catch(() => showNotification('Erro ao copiar link', 'error'));
+        }
+    }
+
+    function handleNewPet() {
+        petForm.reset();
+        linkCard.classList.add('hidden');
+        currentPetLink = null;
+        petForm.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    }
+
+    async function checkUrlForPet() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const petId = urlParams.get('pet');
+        
+        if (petId) {
+            try {
+                // Busca o pet específico no Firestore pelo ID
+                const doc = await db.collection('pets').doc(petId).get();
+                
+                if (doc.exists) {
+                    showPetInfo(doc.data());
+                } else {
+                    showPetNotFound();
+                }
+            } catch (error) {
+                console.error("Erro ao buscar pet: ", error);
+                showPetNotFound();
+            }
+        }
+    }
+
+    function showPetNotFound() {
+        document.body.innerHTML = `
+            <div class="container">
+                <div class="card">
+                    <h2>Pet não encontrado</h2>
+                    <p>O link que você acessou não corresponde a nenhum pet cadastrado.</p>
+                    <a href="${window.location.origin + window.location.pathname}">Voltar para o PetID</a>
+                </div>
+            </div>
+        `;
+    }
+
+    function showPetInfo(pet) {
+        document.body.innerHTML = `
+            <header>
+                <div class="logo">
+                    <div class="logo-icon">🐾</div>
+                    <div><h1>PetID</h1><p>Informações do Pet</p></div>
+                </div>
+            </header>
+            <div class="container">
+                <div class="card">
+                    <h2>Informações do Pet Encontrado</h2>
+                    <div class="pet-info">
+                        <p><strong>Nome:</strong> ${pet.name}</p>
+                        <p><strong>Tipo:</strong> ${pet.type}</p>
+                        <p><strong>Raça:</strong> ${pet.breed}</p>
+                        <p><strong>Dono:</strong> ${pet.ownerName}</p>
+                        <p><strong>Telefone do Dono:</strong> ${pet.ownerPhone}</p>
+                        ${pet.additionalInfo ? `<p><strong>Informações Adicionais:</strong> ${pet.additionalInfo}</p>` : ''}
+                    </div>
+                    <p style="margin-top: 1.5rem; padding: 1rem; background-color: #f0f8ff; border-radius: 5px;">
+                        <strong>Se você encontrou este pet, entre em contato com o dono pelo telefone informado acima.</strong>
+                    </p>
+                    <a href="${window.location.origin + window.location.pathname}" style="display: inline-block; margin-top: 1rem;">Voltar para o PetID</a>
+                </div>
+            </div>
+        `;
+    }
+});
+</script>
