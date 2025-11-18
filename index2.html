@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetID - Identificação para seu Pet</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #6b8cbc;
+            --accent: #ff9a76;
+            --light: #f5f5f5;
+            --dark: #333;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-info {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary {
+            background-color: var(--accent);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #ff8a5c;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e68900;
+        }
+        
+        .link-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .link-display {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 1rem 0;
+            width: 100%;
+            max-width: 600px;
+            word-break: break-all;
+            text-align: center;
+        }
+        
+        .link-display a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .link-display a:hover {
+            text-decoration: underline;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .pet-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .pet-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .pet-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pet-name {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .pet-info {
+            margin-bottom: 1rem;
+        }
+        
+        .pet-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .auth-forms {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .auth-form {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 5px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+            opacity: 1;
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+            opacity: 1;
+        }
+        
+        .notification.warning {
+            background-color: var(--warning);
+            opacity: 1;
+        }
+        
+        .setup-panel {
+            background: linear-gradient(135deg, #ff9a76, #ff6b6b);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .setup-panel h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .setup-panel p {
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .pet-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .auth-forms {
+                flex-direction: column;
+            }
+            
+            .user-info {
+                position: static;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+            
+            .pet-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <div class="logo-icon">🐾</div>
+            <div>
+                <h1>PetID</h1>
+                <p>Identificação segura para seu pet</p>
+            </div>
+        </div>
+        <div class="user-info hidden" id="userInfo">
+            <span id="userName">Usuário</span>
+            <button id="logoutBtn" class="btn-danger">Sair</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Painel de configuração do JSONBin -->
+        <div class="setup-panel hidden" id="setupPanel">
+            <h3>⚠️ Configuração Necessária</h3>
+            <p>Para que seus pets sejam acessíveis em qualquer dispositivo, você precisa configurar o JSONBin.io.</p>
+            <ol>
+                <li>Acesse <a href="https://jsonbin.io" target="_blank" style="color: white; text-decoration: underline;">jsonbin.io</a> e crie uma conta gratuita</li>
+                <li>Vá em "API Keys" e crie uma nova chave</li>
+                <li>Cole a chave abaixo:</li>
+            </ol>
+            <div class="form-group">
+                <input type="text" id="apiKey" placeholder="Sua chave API do JSONBin.io" style="margin-bottom: 1rem;">
+                <button id="saveApiKey" class="btn-secondary">Salvar Chave API</button>
+            </div>
+            <p><small>Esta chave fica salva apenas no seu navegador e é usada para salvar/recuperar os dados dos pets.</small></p>
+        </div>
+        
+        <!-- Área de autenticação -->
+        <div class="card" id="authArea">
+            <h2>Cadastre-se ou Faça Login</h2>
+            <div class="auth-forms">
+                <div class="auth-form">
+                    <h3>Cadastro</h3>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="regName">Nome Completo</label>
+                            <input type="text" id="regName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">E-mail</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Senha</label>
+                            <input type="password" id="regPassword" required minlength="6">
+                        </div>
+                        <button type="submit">Criar Conta</button>
+                    </form>
+                </div>
+                
+                <div class="auth-form">
+                    <h3>Login</h3>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">E-mail</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Senha</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit">Entrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Área principal do aplicativo (após login) -->
+        <div class="hidden" id="appArea">
+            <div class="card">
+                <h2>Cadastrar Novo Pet</h2>
+                <form id="petForm">
+                    <div class="form-group">
+                        <label for="petName">Nome do Pet</label>
+                        <input type="text" id="petName" required placeholder="Ex: Rex, Luna, etc.">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="petType">Tipo de Animal</label>
+                        <select id="petType" required>
+                            <option value="">Selecione...</option>
+                            <option value="Cachorro">Cachorro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Pássaro">Pássaro</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="petBreed">Raça</label>
+                        <input type="text" id="petBreed" required placeholder="Ex: Labrador, Siames, etc.">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="petColor">Cor</label>
+                        <input type="text" id="petColor" placeholder="Ex: Preto, Branco, Caramelo, etc.">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ownerName">Nome do Dono</label>
+                        <input type="text" id="ownerName" required placeholder="Seu nome completo">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ownerPhone">Telefone do Dono</label>
+                        <input type="tel" id="ownerPhone" required placeholder="(11) 99999-9999">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ownerEmail">E-mail do Dono (opcional)</label>
+                        <input type="email" id="ownerEmail" placeholder="seu.email@exemplo.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="additionalInfo">Informações Adicionais</label>
+                        <textarea id="additionalInfo" placeholder="Alergias, cuidados especiais, medicamentos, comportamento, etc."></textarea>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="submit">Cadastrar Pet e Gerar Link</button>
+                        <button type="button" id="checkApiStatus" class="btn-warning">Verificar Status da API</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="card hidden" id="linkCard">
+                <h2>Link Gerado</h2>
+                <p>Este link contém as informações do seu pet. Você pode compartilhá-lo com quem encontrar seu animal.</p>
+                
+                <div class="link-container">
+                    <div class="link-display">
+                        <a href="#" id="petLink" target="_blank">Clique aqui para ver as informações do pet</a>
+                    </div>
+                    <p>Compartilhe este link para que as pessoas possam visualizar as informações do pet</p>
+                </div>
+                
+                <div class="actions">
+                    <button id="copyBtn" class="btn-secondary">Copiar Link</button>
+                    <button id="testLinkBtn" class="btn-warning">Testar Link</button>
+                    <button id="newPetBtn">Cadastrar Outro Pet</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Meus Pets Cadastrados</h2>
+                <div id="storageStatus" class="form-group" style="padding: 1rem; background: #f0f8ff; border-radius: 5px; margin-bottom: 1rem;">
+                    <strong>Status do Armazenamento:</strong> <span id="storageStatusText">Verificando...</span>
+                </div>
+                <div class="pet-list" id="petList">
+                    <p id="noPetsMessage">Nenhum pet cadastrado ainda. Cadastre seu primeiro pet acima!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>PetID &copy; 2023 - Mantenha seu pet seguro e identificado</p>
+        <p><small>Dados armazenados em nuvem via JSONBin.io</small></p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos da interface
+            const authArea = document.getElementById('authArea');
+            const appArea = document.getElementById('appArea');
+            const userInfo = document.getElementById('userInfo');
+            const userName = document.getElementById('userName');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const registerForm = document.getElementById('registerForm');
+            const loginForm = document.getElementById('loginForm');
+            const petForm = document.getElementById('petForm');
+            const linkCard = document.getElementById('linkCard');
+            const petLink = document.getElementById('petLink');
+            const copyBtn = document.getElementById('copyBtn');
+            const newPetBtn = document.getElementById('newPetBtn');
+            const testLinkBtn = document.getElementById('testLinkBtn');
+            const petList = document.getElementById('petList');
+            const noPetsMessage = document.getElementById('noPetsMessage');
+            const setupPanel = document.getElementById('setupPanel');
+            const apiKeyInput = document.getElementById('apiKey');
+            const saveApiKeyBtn = document.getElementById('saveApiKey');
+            const checkApiStatusBtn = document.getElementById('checkApiStatus');
+            const storageStatus = document.getElementById('storageStatusText');
+            
+            // Configurações
+            const JSONBIN_BASE_URL = 'https://api.jsonbin.io/v3/b';
+            let JSONBIN_API_KEY = localStorage.getItem('petid_api_key');
+            let JSONBIN_BIN_ID = localStorage.getItem('petid_bin_id');
+            
+            // Estado da aplicação
+            let currentUser = null;
+            let pets = [];
+            let currentPetLink = null;
+            
+            // Inicialização
+            initializeApp();
+            
+            // Eventos
+            registerForm.addEventListener('submit', handleRegister);
+            loginForm.addEventListener('submit', handleLogin);
+            logoutBtn.addEventListener('click', handleLogout);
+            petForm.addEventListener('submit', handlePetSubmit);
+            copyBtn.addEventListener('click', handleCopy);
+            newPetBtn.addEventListener('click', handleNewPet);
+            testLinkBtn.addEventListener('click', handleTestLink);
+            saveApiKeyBtn.addEventListener('click', handleSaveApiKey);
+            checkApiStatusBtn.addEventListener('click', checkApiStatus);
+            
+            // Funções de inicialização
+            function initializeApp() {
+                checkApiKey();
+                checkAuthStatus();
+                checkUrlForPet();
+                updateStorageStatus();
+            }
+            
+            function checkApiKey() {
+                if (!JSONBIN_API_KEY) {
+                    setupPanel.classList.remove('hidden');
+                    showNotification('Configure o JSONBin.io para usar o PetID em qualquer dispositivo', 'warning');
+                } else {
+                    setupPanel.classList.add('hidden');
+                    // Verificar se a chave ainda é válida
+                    checkApiStatus();
+                }
+            }
+            
+            function handleSaveApiKey() {
+                const apiKey = apiKeyInput.value.trim();
+                if (!apiKey) {
+                    showNotification('Por favor, insira uma chave API válida', 'error');
+                    return;
+                }
+                
+                JSONBIN_API_KEY = apiKey;
+                localStorage.setItem('petid_api_key', apiKey);
+                setupPanel.classList.add('hidden');
+                showNotification('Chave API salva com sucesso!', 'success');
+                checkApiStatus();
+            }
+            
+            // Funções da API JSONBin
+            async function saveToCloud() {
+                if (!JSONBIN_API_KEY) {
+                    showNotification('Configure o JSONBin.io primeiro', 'error');
+                    return null;
+                }
+                
+                try {
+                    const data = {
+                        users: JSON.parse(localStorage.getItem('users')) || [],
+                        pets: JSON.parse(localStorage.getItem('pets')) || []
+                    };
+                    
+                    let response;
+                    
+                    if (JSONBIN_BIN_ID) {
+                        // Atualizar bin existente
+                        response = await fetch(`${JSONBIN_BASE_URL}/${JSONBIN_BIN_ID}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': JSONBIN_API_KEY,
+                                'X-Bin-Versioning': 'false'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                    } else {
+                        // Criar novo bin
+                        response = await fetch(JSONBIN_BASE_URL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': JSONBIN_API_KEY,
+                                'X-Bin-Name': 'PetID Data'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        
+                        const result = await response.json();
+                        JSONBIN_BIN_ID = result.metadata.id;
+                        localStorage.setItem('petid_bin_id', JSONBIN_BIN_ID);
+                    }
+                    
+                    if (response.ok) {
+                        updateStorageStatus('online');
+                        return true;
+                    } else {
+                        throw new Error('Falha ao salvar na nuvem');
+                    }
+                } catch (error) {
+                    console.error('Erro ao salvar na nuvem:', error);
+                    updateStorageStatus('offline');
+                    showNotification('Erro ao sincronizar com a nuvem', 'error');
+                    return false;
+                }
+            }
+            
+            async function loadFromCloud() {
+                if (!JSONBIN_API_KEY || !JSONBIN_BIN_ID) {
+                    return false;
+                }
+                
+                try {
+                    const response = await fetch(`${JSONBIN_BASE_URL}/${JSONBIN_BIN_ID}/latest`, {
+                        headers: {
+                            'X-Master-Key': JSONBIN_API_KEY
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        const record = data.record;
+                        
+                        // Atualizar localStorage com dados da nuvem
+                        if (record.users) localStorage.setItem('users', JSON.stringify(record.users));
+                        if (record.pets) localStorage.setItem('pets', JSON.stringify(record.pets));
+                        
+                        updateStorageStatus('online');
+                        return true;
+                    } else {
+                        throw new Error('Falha ao carregar da nuvem');
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar da nuvem:', error);
+                    updateStorageStatus('offline');
+                    return false;
+                }
+            }
+            
+            async function checkApiStatus() {
+                if (!JSONBIN_API_KEY) {
+                    showNotification('Configure o JSONBin.io primeiro', 'error');
+                    return;
+                }
+                
+                const success = await loadFromCloud();
+                if (success) {
+                    showNotification('Conexão com a nuvem estabelecida!', 'success');
+                    if (currentUser) {
+                        loadUserPets();
+                    }
+                } else {
+                    showNotification('Falha na conexão com a nuvem', 'error');
+                }
+            }
+            
+            function updateStorageStatus(status) {
+                if (status === 'online') {
+                    storageStatus.textContent = '✅ Conectado à nuvem';
+                    storageStatus.style.color = 'var(--success)';
+                } else if (status === 'offline') {
+                    storageStatus.textContent = '❌ Sem conexão com a nuvem';
+                    storageStatus.style.color = 'var(--danger)';
+                } else {
+                    storageStatus.textContent = '⏳ Verificando...';
+                    storageStatus.style.color = 'var(--warning)';
+                }
+            }
+            
+            // Resto do código permanece similar, mas com chamadas à nuvem
+            async function checkAuthStatus() {
+                // Primeiro tenta carregar da nuvem
+                await loadFromCloud();
+                
+                const userData = localStorage.getItem('currentUser');
+                if (userData) {
+                    currentUser = JSON.parse(userData);
+                    showAppArea();
+                } else {
+                    showAuthArea();
+                }
+            }
+            
+            async function handleRegister(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('regName').value;
+                const email = document.getElementById('regEmail').value;
+                const password = document.getElementById('regPassword').value;
+                
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const existingUser = users.find(user => user.email === email);
+                
+                if (existingUser) {
+                    showNotification('Este e-mail já está cadastrado!', 'error');
+                    return;
+                }
+                
+                const newUser = {
+                    id: Date.now().toString(),
+                    name,
+                    email,
+                    password
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Salvar na nuvem
+                await saveToCloud();
+                
+                showNotification('Conta criada com sucesso! Faça login para continuar.', 'success');
+                registerForm.reset();
+            }
+            
+            async function handleLogin(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (!user) {
+                    showNotification('E-mail ou senha incorretos!', 'error');
+                    return;
+                }
+                
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showAppArea();
+                showNotification(`Bem-vindo(a), ${user.name}!`, 'success');
+            }
+            
+            async function handleLogout() {
+                currentUser = null;
+                localStorage.removeItem('currentUser');
+                showAuthArea();
+                showNotification('Logout realizado com sucesso!', 'success');
+            }
+            
+            function showAuthArea() {
+                authArea.classList.remove('hidden');
+                appArea.classList.add('hidden');
+                userInfo.classList.add('hidden');
+            }
+            
+            function showAppArea() {
+                authArea.classList.add('hidden');
+                appArea.classList.remove('hidden');
+                userInfo.classList.remove('hidden');
+                userName.textContent = currentUser.name;
+                loadUserPets();
+            }
+            
+            function loadUserPets() {
+                const allPets = JSON.parse(localStorage.getItem('pets')) || [];
+                pets = allPets.filter(pet => pet.userId === currentUser.id);
+                updatePetList();
+            }
+            
+            async function handlePetSubmit(e) {
+                e.preventDefault();
+                
+                const petData = {
+                    id: Date.now().toString(),
+                    userId: currentUser.id,
+                    name: document.getElementById('petName').value,
+                    type: document.getElementById('petType').value,
+                    breed: document.getElementById('petBreed').value,
+                    color: document.getElementById('petColor').value,
+                    ownerName: document.getElementById('ownerName').value,
+                    ownerPhone: document.getElementById('ownerPhone').value,
+                    ownerEmail: document.getElementById('ownerEmail').value,
+                    additionalInfo: document.getElementById('additionalInfo').value,
+                    date: new Date().toLocaleDateString('pt-BR')
+                };
+                
+                const allPets = JSON.parse(localStorage.getItem('pets')) || [];
+                allPets.push(petData);
+                localStorage.setItem('pets', JSON.stringify(allPets));
+                
+                pets.push(petData);
+                
+                // Salvar na nuvem
+                const cloudSuccess = await saveToCloud();
+                
+                generateLink(petData);
+                linkCard.classList.remove('hidden');
+                updatePetList();
+                linkCard.scrollIntoView({ behavior: 'smooth' });
+                
+                if (cloudSuccess) {
+                    showNotification('Pet cadastrado com sucesso e sincronizado na nuvem!', 'success');
+                } else {
+                    showNotification('Pet cadastrado localmente, mas não foi possível sincronizar com a nuvem', 'warning');
+                }
+            }
+            
+            function generateLink(petData) {
+                const baseUrl = window.location.href.split('?')[0];
+                const petUrl = `${baseUrl}?pet=${petData.id}`;
+                
+                petLink.href = petUrl;
+                petLink.textContent = petUrl;
+                currentPetLink = petUrl;
+            }
+            
+            function updatePetList() {
+                if (pets.length === 0) {
+                    noPetsMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                noPetsMessage.classList.add('hidden');
+                petList.innerHTML = '';
+                
+                pets.forEach(pet => {
+                    const petCard = document.createElement('div');
+                    petCard.className = 'pet-card';
+                    
+                    petCard.innerHTML = `
+                        <div class="pet-name">${pet.name}</div>
+                        <div class="pet-info">
+                            <p><strong>Tipo:</strong> ${pet.type}</p>
+                            <p><strong>Raça:</strong> ${pet.breed}</p>
+                            ${pet.color ? `<p><strong>Cor:</strong> ${pet.color}</p>` : ''}
+                            <p><strong>Dono:</strong> ${pet.ownerName}</p>
+                            <p><strong>Telefone:</strong> ${pet.ownerPhone}</p>
+                            ${pet.ownerEmail ? `<p><strong>E-mail:</strong> ${pet.ownerEmail}</p>` : ''}
+                            ${pet.additionalInfo ? `<p><strong>Informações:</strong> ${pet.additionalInfo}</p>` : ''}
+                            <p><strong>Cadastrado em:</strong> ${pet.date}</p>
+                        </div>
+                        <div class="pet-actions">
+                            <button class="btn-view-link" data-id="${pet.id}">Ver Link</button>
+                            <button class="btn-delete btn-danger" data-id="${pet.id}">Excluir</button>
+                        </div>
+                    `;
+                    
+                    petList.appendChild(petCard);
+                });
+                
+                document.querySelectorAll('.btn-view-link').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const petId = this.getAttribute('data-id');
+                        const pet = pets.find(p => p.id === petId);
+                        if (pet) {
+                            generateLink(pet);
+                            linkCard.classList.remove('hidden');
+                            linkCard.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        const petId = this.getAttribute('data-id');
+                        
+                        if (confirm('Tem certeza que deseja excluir este pet?')) {
+                            const allPets = JSON.parse(localStorage.getItem('pets')) || [];
+                            const updatedPets = allPets.filter(p => p.id !== petId);
+                            localStorage.setItem('pets', JSON.stringify(updatedPets));
+                            
+                            pets = pets.filter(p => p.id !== petId);
+                            updatePetList();
+                            
+                            // Sincronizar com a nuvem
+                            await saveToCloud();
+                            
+                            showNotification('Pet excluído com sucesso!', 'success');
+                        }
+                    });
+                });
+            }
+            
+            function handleCopy() {
+                if (currentPetLink) {
+                    navigator.clipboard.writeText(currentPetLink)
+                        .then(() => {
+                            showNotification('Link copiado para a área de transferência!', 'success');
+                        })
+                        .catch(err => {
+                            console.error('Erro ao copiar link: ', err);
+                            showNotification('Erro ao copiar link', 'error');
+                        });
+                }
+            }
+            
+            function handleTestLink() {
+                if (currentPetLink) {
+                    window.open(currentPetLink, '_blank');
+                }
+            }
+            
+            function handleNewPet() {
+                petForm.reset();
+                linkCard.classList.add('hidden');
+                petLink.href = '#';
+                petLink.textContent = 'Clique aqui para ver as informações do pet';
+                currentPetLink = null;
+                petForm.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            function showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 4000);
+            }
+            
+            function checkUrlForPet() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const petId = urlParams.get('pet');
+                
+                if (petId) {
+                    // Primeiro tenta carregar da nuvem
+                    loadFromCloud().then(() => {
+                        const allPets = JSON.parse(localStorage.getItem('pets')) || [];
+                        const pet = allPets.find(p => p.id === petId);
+                        
+                        if (pet) {
+                            showPetInfo(pet);
+                        } else {
+                            showPetNotFound();
+                        }
+                    });
+                }
+            }
+            
+            function showPetInfo(pet) {
+                document.body.innerHTML = `
+                    <header>
+                        <div class="logo">
+                            <div class="logo-icon">🐾</div>
+                            <div>
+                                <h1>PetID</h1>
+                                <p>Informações do Pet</p>
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <div class="container">
+                        <div class="card">
+                            <h2>Informações do Pet</h2>
+                            <div class="pet-info">
+                                <p><strong>Nome:</strong> ${pet.name}</p>
+                                <p><strong>Tipo:</strong> ${pet.type}</p>
+                                <p><strong>Raça:</strong> ${pet.breed}</p>
+                                ${pet.color ? `<p><strong>Cor:</strong> ${pet.color}</p>` : ''}
+                                <p><strong>Dono:</strong> ${pet.ownerName}</p>
+                                <p><strong>Telefone do Dono:</strong> ${pet.ownerPhone}</p>
+                                ${pet.ownerEmail ? `<p><strong>E-mail do Dono:</strong> ${pet.ownerEmail}</p>` : ''}
+                                ${pet.additionalInfo ? `<p><strong>Informações Adicionais:</strong> ${pet.additionalInfo}</p>` : ''}
+                            </div>
+                            <p style="margin-top: 1.5rem; padding: 1rem; background-color: #f0f8ff; border-radius: 5px;">
+                                <strong>Se você encontrou este pet, entre em contato com o dono pelo telefone informado acima.</strong>
+                            </p>
+                            <a href="${window.location.origin + window.location.pathname}" style="display: inline-block; margin-top: 1rem; color: var(--primary); text-decoration: none; font-weight: 600;">Voltar para o PetID</a>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            function showPetNotFound() {
+                document.body.innerHTML = `
+                    <header>
+                        <div class="logo">
+                            <div class="logo-icon">🐾</div>
+                            <div>
+                                <h1>PetID</h1>
+                                <p>Pet Não Encontrado</p>
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <div class="container">
+                        <div class="card">
+                            <h2>Pet não encontrado</h2>
+                            <p>O link que você acessou não corresponde a nenhum pet cadastrado.</p>
+                            <p>Isso pode acontecer se:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>O pet foi removido pelo dono</li>
+                                <li>O link está incorreto</li>
+                                <li>Os dados ainda não foram sincronizados</li>
+                            </ul>
+                            <a href="${window.location.origin + window.location.pathname}" style="display: inline-block; margin-top: 1rem; color: var(--primary); text-decoration: none; font-weight: 600;">Voltar para o PetID</a>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
